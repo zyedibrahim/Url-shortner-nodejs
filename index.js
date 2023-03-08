@@ -437,6 +437,7 @@ const pstdata = {
 urllink:urllink,
 shorturl:`http://localhost:4000/${shortid.generate()}`,
 clickcount: 0,
+
 }
 
 const data = await client
@@ -455,8 +456,50 @@ response.send(data)
 
 
 
+    app.get("/:shortcode", async function (request, response) {
+   
+      const getdata = await client
+      .db("userdata")
+      .collection("urldetails")
+      .findOne({shorturl: `http://localhost:4000/${request.params.shortcode}` })
+      
+      const data = await client
+      .db("userdata")
+      .collection("urldetails")
+      .updateOne({shorturl: `http://localhost:4000/${request.params.shortcode}` },{$set:{clickcount: getdata.clickcount +1 }} )
+
+
+
+   response.redirect(getdata.urllink)  
+     
+     
+     
+         });
+     
     
   
+app.delete("/shorturlpage/:id",async function(req, res) {
+
+  const {id} = req.params;
+console.log(id)
+
+try{
+  const getdata = await client
+  .db("userdata")
+  .collection("urldetails")
+  .deleteOne({_id: new ObjectId(id) })
+  
+
+  res.status(200).send({"status":" delete success"});
+
+}catch(err){
+  res.status(400).send({"status" : "something went wrong" })
+}
+
+
+})
+
+
 
 
 
