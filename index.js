@@ -53,10 +53,6 @@ response.send(getusername)
 app.get("/",function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩");
 });
-app.get("/contentpage",auth,function (request, response) {
-  response.status(200).send({"message":"This is contentpage"});
-});
-
 
 //  create user
 app.post("/users/signup",  async function  (request, response) {
@@ -72,16 +68,24 @@ const getusername = await client
 .findOne({username:username})
 
 
+const getemail = await client
+.db('userdata')
+.collection('userdetails')
+.findOne({email:email})
+
+
 if(getusername){
 
-  response.send({"message": "user already exists"})
+  response.send({"message": "user name already exists"})
 }
 else if(password.length < 8 ){
 response.send({"message": "password must be at least 8 characters"})
 }
+else if(email === getemail.email ){
+response.send({"message": "This email already exists"})
+}
+
 else{
-
-
   const result = {
     username:username,
     password:hashedpassword,
