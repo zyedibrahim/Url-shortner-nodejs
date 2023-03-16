@@ -425,10 +425,35 @@ if(olduser.random === random){
 
 
 response.send(getdata)
-console.log(getdata);
+
 
 
     });
+
+
+
+    app.get("/shorturlpage/linkdetails", async function (request, response) {
+   
+      const getdata = await client
+      .db("userdata")
+      .collection("urldetails")
+      .find({data})
+ 
+     
+     
+     response.send(getdata)
+ 
+     
+     
+         });
+
+
+
+
+
+
+
+
 
     // post url storto db
     app.post("/shorturlpage", async function (request, response) {
@@ -441,6 +466,7 @@ const pstdata = {
 urllink:urllink,
 shorturl:`http://localhost:4000/${shortid.generate()}`,
 clickcount: 0,
+date: new Date()
 
 }
 
@@ -461,12 +487,16 @@ response.send(data)
 
 
     app.get("/:shortcode", async function (request, response) {
-   
+
+
+
       const getdata = await client
       .db("userdata")
       .collection("urldetails")
       .findOne({shorturl: `http://localhost:4000/${request.params.shortcode}` })
       
+
+
       const data = await client
       .db("userdata")
       .collection("urldetails")
@@ -485,7 +515,7 @@ response.send(data)
 app.delete("/shorturlpage/:id",async function(req, res) {
 
   const {id} = req.params;
-console.log(id)
+
 
 try{
   const getdata = await client
