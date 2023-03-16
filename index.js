@@ -51,21 +51,30 @@ response.send(getusername)
 
 });
 app.get("/", async function (request, response) {
-  const getdata = await client
-  .db("userdata")
-  .collection("urldetails")
-  .findOne({shorturl: `http://localhost:4000/${request.params.shortcode}` })
+  // const getdata = await client
+  // .db("userdata")
+  // .collection("urldetails")
+  // .findOne({shorturl: `http://localhost:4000/${request.params.shortcode}` })
   
 
 
-  const data = await client
-  .db("userdata")
-  .collection("urldetails")
-  .updateOne({shorturl: `http://localhost:4000/${request.params.shortcode}` },{$set:{clickcount: getdata.clickcount +1 }} )
+  // const data = await client
+  // .db("userdata")
+  // .collection("urldetails")
+  // .updateOne({shorturl: `http://localhost:4000/${request.params.shortcode}` },{$set:{clickcount: getdata.clickcount +1 }} )
 
 
 
-response.redirect(getdata.urllink) 
+// response.redirect(getdata.urllink) 
+ 
+const getdata = await client
+.db("userdata")
+.collection("urldetails")
+.find({})
+.toArray()
+
+
+response.send(getdata)
 
 });
 
