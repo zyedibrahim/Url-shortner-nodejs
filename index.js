@@ -40,6 +40,16 @@ async function generateHashedPassword(password){
 }
 
 
+app.delete("/users", async function (request, response) {
+  const getusername = await client
+  .db('userdata')
+  .collection('userdetails')
+  .deleteMany({})
+
+response.send(getusername)
+
+
+});
 app.get("/", async function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩");
 });
@@ -403,6 +413,120 @@ if(olduser.random === random){
   
     
     })
+
+
+    app.get("/shorturlpage", async function (request, response) {
+   
+ const getdata = await client
+ .db("userdata")
+ .collection("urldetails")
+ .find({})
+ .toArray()
+
+
+response.send(getdata)
+
+
+
+    });
+
+
+
+    app.get("/shorturlpage/linkdetails", async function (request, response) {
+   
+      const getdata = await client
+      .db("userdata")
+      .collection("urldetails")
+      .find({data})
+ 
+     
+     
+     response.send(getdata)
+ 
+     
+     
+         });
+
+
+
+
+    // post url storto db
+    app.post("/shorturlpage", async function (request, response) {
+   
+     const {urllink} =request.body;
+
+
+const pstdata = {
+
+urllink:urllink,
+shorturl:`http://localhost:4000/${shortid.generate()}`,
+clickcount: 0,
+date: new Date()
+
+}
+
+const data = await client
+.db("userdata")
+.collection('urldetails')
+.insertOne(pstdata)
+
+response.send(data)
+
+
+
+
+
+    });
+
+
+
+
+    app.get("/:shortcode", async function (request, response) {
+
+
+
+      const getdata = await client
+      .db("userdata")
+      .collection("urldetails")
+      .findOne({shorturl: `http://localhost:4000/${request.params.shortcode}` })
+      
+
+
+      const data = await client
+      .db("userdata")
+      .collection("urldetails")
+      .updateOne({shorturl: `http://localhost:4000/${request.params.shortcode}` },{$set:{clickcount: getdata.clickcount +1 }} )
+
+
+
+   response.redirect(getdata.urllink)  
+     
+     
+     
+         });
+     
+    
+  
+app.delete("/shorturlpage/:id",async function(req, res) {
+
+  const {id} = req.params;
+
+
+try{
+  const getdata = await client
+  .db("userdata")
+  .collection("urldetails")
+  .deleteOne({_id: new ObjectId(id) })
+  
+
+  res.status(200).send({"status":" delete success"});
+
+}catch(err){
+  res.status(400).send({"status" : "something went wrong" })
+}
+
+
+})
 
 
 
