@@ -50,8 +50,23 @@ response.send(getusername)
 
 
 });
-app.get("/",function (request, response) {
-  response.send("🙋‍♂️, 🌏 🎊✨🤩");
+app.get("/", async function (request, response) {
+  const getdata = await client
+  .db("userdata")
+  .collection("urldetails")
+  .findOne({shorturl: `http://localhost:4000/${request.params.shortcode}` })
+  
+
+
+  const data = await client
+  .db("userdata")
+  .collection("urldetails")
+  .updateOne({shorturl: `http://localhost:4000/${request.params.shortcode}` },{$set:{clickcount: getdata.clickcount +1 }} )
+
+
+
+response.redirect(getdata.urllink) 
+
 });
 
 //  create user
@@ -446,11 +461,6 @@ response.send(getdata)
      
      
          });
-
-
-
-
-
 
 
 
