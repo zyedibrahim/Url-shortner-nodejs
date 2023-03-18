@@ -414,7 +414,7 @@ if(olduser.random === random){
     })
 
 
-    app.get("/shorturlpage", async function (request, response) {
+    app.get("/shorturlpage",auth, async function (request, response) {
    
  const getdata = await client
  .db("userdata")
