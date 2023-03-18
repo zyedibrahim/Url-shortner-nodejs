@@ -81,7 +81,7 @@ if(getusername){
 else if(password.length < 8 ){
 response.send({"message": "password must be at least 8 characters"})
 }
-else if(email === getemail.email ){
+else if(getemail){
 response.send({"message": "This email already exists"})
 }
 
@@ -196,7 +196,7 @@ console.log(data);
 });
 
 // login
-app.post("/users/login", async function  (request, response) {
+app.post("/users/login",    async function  (request, response) {
   
   const {username,password} = request.body;
 
@@ -237,7 +237,6 @@ const isppasswordcheck = await bcrypt.compare(password,storedpassword)
 
   
   });
-
 
 
 
@@ -448,10 +447,8 @@ response.send(getdata)
          });
 
 
-
-
     // post url storto db
-    app.post("/shorturlpage", async function (request, response) {
+    app.post("/shorturlpage",auth, async function (request, response) {
    
      const {urllink} =request.body;
 
@@ -478,9 +475,6 @@ response.send(data)
 
     });
 
-
-
-
     app.get("/:shortcode", async function (request, response) {
 
 
@@ -488,14 +482,14 @@ response.send(data)
       const getdata = await client
       .db("userdata")
       .collection("urldetails")
-      .findOne({shorturl: `http://localhost:4000/${request.params.shortcode}` })
+      .findOne({shorturl: `${process.env.PORT}/${request.params.shortcode}` })
       
 
 
       const data = await client
       .db("userdata")
       .collection("urldetails")
-      .updateOne({shorturl: `http://localhost:4000/${request.params.shortcode}` },{$set:{clickcount: getdata.clickcount +1 }} )
+      .updateOne({shorturl: `${process.env.PORT}/${request.params.shortcode}` },{$set:{clickcount: getdata.clickcount +1 }} )
 
 
 
