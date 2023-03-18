@@ -456,7 +456,7 @@ response.send(getdata)
 const pstdata = {
 
 urllink:urllink,
-shorturl:`http://localhost:4000/${shortid.generate()}`,
+shorturl:`${process.env.port}/${shortid.generate()}`,
 clickcount: 0,
 date: new Date()
 
