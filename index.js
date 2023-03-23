@@ -462,7 +462,7 @@ response.send(getdata)
 
 
     // post url storto db
-    app.post("/shorturlpage",auth, async function (request, response) {
+    app.post("/shorturlpage", async function (request, response) {
    
      const {urllink} =request.body;
 
