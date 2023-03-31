@@ -251,7 +251,7 @@ const olduser = await client
 .collection('userdetails')
 .findOne({email:email})
 
- 
+//  
 
 try{
 if(!olduser){
